@@ -52,3 +52,8 @@ if not cpfs_comuns_planilha1_planilha2.empty:
     print(linha_correspondente_planilha2)
     print("\nLinha correspondente na Planilha 1 para o CPF comum:")
     print(linha_correspondente_planilha1)
+
+
+
+for i in range(planilha1.shape[1]):
+    print(planilha1.iloc[:, i])
