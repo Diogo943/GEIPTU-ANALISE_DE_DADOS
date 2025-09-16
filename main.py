@@ -7,10 +7,10 @@ class AnaliseDados:
     def __init__(self, caminho_planilha1, caminho_planilha2):
         self.planilha1 = pd.read_excel(caminho_planilha1)
         self.planilha2 = pd.read_excel(caminho_planilha2)
-        self.cpfs_planilha1 = self.planilha1['CPF'].dropna()
+        self.cpfs_planilha1 = self.verificar_is_cpf(self.planilha1)
         self.matriculas_planilha1 = self.planilha1['Matricula'].dropna()
         self.enderecos_planilha2 = self.planilha2['Endereço'].dropna()
-        self.cpfs_planilha2 = self.planilha2['CPF'].dropna()
+        self.cpfs_planilha2 = self.verificar_is_cpf(self.planilha2)
 
     def cpfs_comuns(self):
         return self.cpfs_planilha1[self.cpfs_planilha1.isin(self.cpfs_planilha2)]
@@ -23,6 +23,16 @@ class AnaliseDados:
             return linha_planilha1, linha_planilha2
         else:
             return None, None
+    
+    def verificar_is_cpf(self, planilha):
+        for i in range(planilha.shape[1]):
+            if planilha.iloc[:, i].str.match(r'^\d{3}\.\d{3}\.\d{3}-\d{2}$').all():               
+                return planilha.iloc[:, i].dropna()
+    
+    def verificar_is_matricula(self, planilha):
+        for i in range(planilha.shape[1]):
+            if planilha.iloc[:, i]:
+                pass
         
 if __name__ == "__main__":
     #Ler as planilhas
@@ -44,3 +54,7 @@ if __name__ == "__main__":
                 print(linha1)
                 print(f"\nLinha correspondente na Planilha 2 para o CPF {cpf}:")
                 print(linha2)
+        
+        matricula = analise.verificar_is_matricula(analise.planilha1)
+        print("\nMatrículas na Planilha 1:")
+        print(matricula)
